@@ -120,7 +120,7 @@
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(100, 16);
             this.checkBox2.TabIndex = 6;
-            this.checkBox2.Text = "히스토리 관리";
+            this.checkBox2.Text = "히스토리 검색";
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.CheckHisory);
             // 
@@ -132,7 +132,7 @@
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(88, 16);
             this.checkBox1.TabIndex = 5;
-            this.checkBox1.Text = "대화형 검색";
+            this.checkBox1.Text = "논리식 비교";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckWeb);
             // 

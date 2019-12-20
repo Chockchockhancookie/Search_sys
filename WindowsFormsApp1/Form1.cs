@@ -15,7 +15,7 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        
+
         bool http_complete = false;
         #region Function
         //-----------------------< Function >------------------------//
@@ -48,7 +48,7 @@ namespace WindowsFormsApp1
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if(textBox2.Text != null) { 
+                if (textBox2.Text != null) {
                     this.Button6_Click(sender, e);
                 }
             }
@@ -307,7 +307,7 @@ namespace WindowsFormsApp1
             {
                 searching_data = "";
 
-                if (data != "") { 
+                if (data != "") {
                     listBox1.Items.Add(data);
                 }
 
@@ -323,7 +323,7 @@ namespace WindowsFormsApp1
             else if (checkBox1.Checked) // 웹브라우저 두개 띄운 화면
             {
                 searching_data = textBox1.Text;
-               
+
                 string tmp1 = "https://www.google.com/search?&q=" + StemSample2(searching_data) + "&tbs=qdr:" + SearchPeriod;
                 string tmp2 = "https://www.google.com/search?&q=" + searching_data + "&tbs=qdr:" + SearchPeriod;
                 webBrowser1.Navigate(tmp1);
@@ -366,7 +366,7 @@ namespace WindowsFormsApp1
                     searching_data += listBox1.Items[i];
                     searching_data += " ";
                 }
-                
+
 
                 string tmp1 = "https://search.naver.com/search.naver?sm=top_hty&fbm=0&ie=utf8&query=" + HttpUtility.UrlEncode(StemSample1(searching_data)) + "&tqi=" + SearchPeriod;
                 webBrowser1.Navigate(tmp1);
@@ -375,7 +375,7 @@ namespace WindowsFormsApp1
             else if (checkBox1.Checked) // 웹브라우저 두개 띄운 화면
             {
                 searching_data = data;
-                
+
                 string tmp1 = "https://search.naver.com/search.naver?sm=top_hty&fbm=0&ie=utf8&query=" + HttpUtility.UrlEncode(StemSample1(searching_data)) + "&tqi=" + SearchPeriod;
                 string tmp2 = "https://search.naver.com/search.naver?sm=top_hty&fbm=0&ie=utf8&query=" + HttpUtility.UrlEncode(searching_data) + "&tqi=" + SearchPeriod;
                 webBrowser1.Navigate(tmp1);
@@ -396,33 +396,39 @@ namespace WindowsFormsApp1
                 }
             }
         }
-        
+
         private void Button1_Click(object sender, EventArgs e)
         {
             if (textBox2.Text != "")
             {
-                if(textBox2.Text != "") {
+                if (textBox2.Text != "") {
                     listBox1.Items.Add(textBox2.Text);
-                }
-                string SearchType = comboBox1.SelectedItem.ToString();
+                    //}
+                    string SearchType = comboBox1.SelectedItem.ToString();
 
-                if (SearchType == "Google")
-                {
-                    Module_Google("");
+                    if (SearchType == "Google")
+                    {
+                        Module_Google("");
+                    }
+                    else if (SearchType == "Naver")
+                    {
+                        Module_Naver("");
+                    }
                 }
-                else if (SearchType == "Naver")
-                {
-                    Module_Naver("");
-                }
-            }
-            //Add_Entry_to_Database();
-        } // 추가하기
+                //Add_Entry_to_Database();
+            } // 추가하기
 
+            
+
+        }
+        
+        
         private void Button8_Click(object sender, EventArgs e)
         {
             if (textBox2.Text != null)
             {
-                if(textBox2.Text!= "") { 
+                if (textBox2.Text != "")
+                {
                     listBox1.Items[listBox1.SelectedIndex] = textBox2.Text;
                 }
                 Button6_Click(sender, e);
@@ -433,7 +439,7 @@ namespace WindowsFormsApp1
         private void Button7_Click(object sender, EventArgs e)
         {
             listBox1.Items.RemoveAt(listBox1.SelectedIndex);
-            Button6_Click(sender,e);
+            Button6_Click(sender, e);
             //Delete_Row_of_Database();
         } // 삭제하기
 
@@ -444,7 +450,7 @@ namespace WindowsFormsApp1
 
         #region Parsing_Data
         //-----------------------< parsing data >-----------------------------//
-        public string StemSample2(string input_Search_Data)
+        private string StemSample2(string input_Search_Data)
         {
             var tokens = TwitterKoreanProcessorCS.Tokenize(
                               TwitterKoreanProcessorCS.Normalize(input_Search_Data));
@@ -462,6 +468,7 @@ namespace WindowsFormsApp1
             List<string> output = new List<string>();
             List<string> input = new List<string>();
             List<string> or = new List<string>();
+            List<string> etc = new List<string>();
 
             String sum = "";
 
@@ -491,6 +498,7 @@ namespace WindowsFormsApp1
                     second.Add(list[i - 1] + ".." + list[i + 1]);
                     list.RemoveAt(i + 1);
                 }
+
                 else
                     second.Add(list[i]);
             }
@@ -499,33 +507,13 @@ namespace WindowsFormsApp1
             {
                 if (second[i].Contains("형식"))
                 {
-                    if (second[i - 1].Contains("ppt"))
+                    if (second[i - 1].Contains("ppt") || second[i - 1].Contains("pdf") || second[i - 1].Contains("xls") || second[i - 1].Contains("doc"))
                     {
-                        second[i] = "filetype:ppt";
+                        second[i] = "filetype:" + second[i - 1];
                         third.Add(second[i]);
                         third.RemoveAt(i - 1);
                     }
 
-                    else if (second[i - 1].Contains("pdf"))
-                    {
-                        second[i] = "filetype:pdf";
-                        third.Add(second[i]);
-                        third.RemoveAt(i - 1);
-                    }
-
-                    else if (second[i - 1].Contains("xls"))
-                    {
-                        second[i] = "filetype:xls";
-                        third.Add(second[i]);
-                        third.RemoveAt(i - 1);
-                    }
-
-                    else if (second[i - 1].Contains("doc"))
-                    {
-                        second[i] = "filetype:doc";
-                        third.Add(second[i]);
-                        third.RemoveAt(i - 1);
-                    }
                 }
                 else
                     third.Add(second[i]);
@@ -563,18 +551,21 @@ namespace WindowsFormsApp1
             {
                 if (fifth[i].Contains("-"))
                     sub.Add(fifth[i]);
-                else if (fifth[i].Contains("-"))
+                else if (fifth[i].Contains("OR"))
                     or.Add(fifth[i]);
                 else if (fifth[i].Contains("site") || fifth[i].Contains("filetype"))
                     seq.Add(fifth[i]);
+                else if (fifth[i].Contains("#"))
+                    etc.Add(fifth[i]);
                 else
                     plus.Add(fifth[i]);
 
             }
 
             output.AddRange(plus);
-            output.AddRange(or);
             output.AddRange(sub);
+            output.AddRange(or);
+            output.AddRange(etc);
             output.AddRange(seq);
 
             for (int i = 0; i < output.Count; i++)
@@ -585,6 +576,10 @@ namespace WindowsFormsApp1
                     input.Add(output[i]);
                 else if (fifth[i].Contains("#"))
                     input.Add(output[i]);
+                else if (output[i].Contains("중") || output[i].Contains("검색"))
+                {
+
+                }
                 else
                     input.Add("+" + output[i]);
             }
@@ -783,7 +778,6 @@ namespace WindowsFormsApp1
 
         #endregion /Database
 
-        
     }
-
 }
+
